@@ -1,0 +1,13 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+# Rider ignored files
+/.idea.douell_p.GenericMediatR.iml
+/projectSettingsUpdater.xml
+/modules.xml
+/contentModel.xml
+# Datasource local storage ignored files
+/../../../../../../../:\development\my_workspace\douell_p.GenericMediatR\.idea\.idea.douell_p.GenericMediatR\.idea/dataSources/
+/dataSources.local.xml
+# Editor-based HTTP Client requests
+/httpRequests/

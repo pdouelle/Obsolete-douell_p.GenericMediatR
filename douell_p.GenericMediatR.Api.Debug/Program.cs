@@ -20,8 +20,6 @@ namespace douell_p.GenericMediatR.Api.Debug
                 try
                 {
                     var context = scope.ServiceProvider.GetService<DatabaseService>();
-                    //context.Database.EnsureDeleted();
-                    //context.Database.EnsureCreated();
                     context.Database.Migrate();
                 }
                 catch (Exception ex)

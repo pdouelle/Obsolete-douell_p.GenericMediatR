@@ -21,15 +21,13 @@ namespace douell_p.GenericMediatR.Api.Debug
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
 
             services.AddGenericMediatR();
 
-            var connectionString =
-                "Server=tcp:localhost,1433;Database=NuggetFifou;User=sa;Password=yourStrong(!)Password;MultipleActiveResultSets=true;Connection Timeout=60;";
+            var connectionString = Configuration.GetConnectionString("Database");
             services.AddDbContext<DatabaseService>(options => { options.UseSqlServer(connectionString); });
 
             services.AddSwaggerGen(c =>
@@ -38,7 +36,6 @@ namespace douell_p.GenericMediatR.Api.Debug
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())

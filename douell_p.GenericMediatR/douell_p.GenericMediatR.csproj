@@ -2,6 +2,12 @@
 
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
+        <PackageId>douell_p.GenericMediatR</PackageId>
+        <Version>1.0.1</Version>
+        <Authors>Philippe DOUELLE</Authors>
+        <Company>BETTERIT</Company>
+        <RootNamespace>douell_p.GenericMediatR</RootNamespace>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     </PropertyGroup>
 
     <ItemGroup>

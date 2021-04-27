@@ -8,16 +8,16 @@ namespace douell_p.GenericMediatR.Handlers.Generics.Commands.Delete
 {
     public class DeleteCommandHandler<T> : IRequestHandler<DeleteCommandModel<T>, Unit> where T : IEntity
     {
-        private readonly IRepository<T> _repository;
+        protected readonly IRepository<T> Repository;
 
         public DeleteCommandHandler(IRepository<T> repository)
         {
-            _repository = repository;
+            Repository = repository;
         }
 
         public virtual async Task<Unit> Handle(DeleteCommandModel<T> command, CancellationToken cancellationToken)
         {
-            _repository.Delete(command.Request);
+            Repository.Delete(command.Request);
             
             return Unit.Value;
         }

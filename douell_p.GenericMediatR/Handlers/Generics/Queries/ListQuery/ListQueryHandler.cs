@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,14 +9,14 @@ namespace douell_p.GenericMediatR.Handlers.Generics.Queries.ListQuery
 {
     public class ListQueryHandler<T> : IRequestHandler<ListQueryModel<T>, IEnumerable<T>> where T : IEntity
     {
-        private readonly IRepository<T> _repository;
+        protected readonly IRepository<T> Repository;
 
         public ListQueryHandler(IRepository<T> repository)
         {
-            _repository = repository;
+            Repository = repository;
         }
 
         public virtual async Task<IEnumerable<T>> Handle(ListQueryModel<T> listQuery, CancellationToken cancellationToken) =>
-            await _repository.GetAllAsync(cancellationToken);
+            await Repository.GetAllAsync(cancellationToken);
     }
 }

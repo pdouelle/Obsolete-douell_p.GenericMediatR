@@ -8,16 +8,16 @@ namespace douell_p.GenericMediatR.Handlers.Generics.Commands.Create
 {
     public class CreateCommandHandler<T> : IRequestHandler<CreateCommandModel<T>, Unit> where T : IEntity
     {
-        private readonly IRepository<T> _repository;
+        protected readonly IRepository<T> Repository;
 
         public CreateCommandHandler(IRepository<T> repository)
         {
-            _repository = repository;
+            Repository = repository;
         }
 
         public virtual async Task<Unit> Handle(CreateCommandModel<T> command, CancellationToken cancellationToken)
         {
-            _repository.Create(command.Request);
+            Repository.Create(command.Request);
 
             return Unit.Value;
         }

@@ -8,16 +8,16 @@ namespace douell_p.GenericMediatR.Handlers.Generics.Commands.Update
 {
     public class UpdateCommandHandler<T> : IRequestHandler<UpdateCommandModel<T>, Unit> where T : IEntity
     {
-        private readonly IRepository<T> _repository;
+        protected readonly IRepository<T> Repository;
 
         public UpdateCommandHandler(IRepository<T> repository)
         {
-            _repository = repository;
+            Repository = repository;
         }
 
         public virtual async Task<Unit> Handle(UpdateCommandModel<T> command, CancellationToken cancellationToken)
         {
-            _repository.Edit(command.Request);
+            Repository.Edit(command.Request);
 
             return Unit.Value;
         }

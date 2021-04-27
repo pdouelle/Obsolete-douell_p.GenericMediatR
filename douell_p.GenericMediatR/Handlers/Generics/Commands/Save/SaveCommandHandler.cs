@@ -8,14 +8,14 @@ namespace douell_p.GenericMediatR.Handlers.Generics.Commands.Save
 {
     public class SaveCommandHandler<T> : IRequestHandler<SaveCommandModel<T>, bool> where T : IEntity
     {
-        private readonly IRepository<T> _repository;
+        protected readonly IRepository<T> Repository;
 
         public SaveCommandHandler(IRepository<T> repository)
         {
-            _repository = repository;
+            Repository = repository;
         }
 
         public virtual async Task<bool> Handle(SaveCommandModel<T> command, CancellationToken cancellationToken) =>
-            await _repository.SaveAsync(cancellationToken);
+            await Repository.SaveAsync(cancellationToken);
     }
 }

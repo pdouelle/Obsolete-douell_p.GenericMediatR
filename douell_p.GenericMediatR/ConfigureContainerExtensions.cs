@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using Autofac;
 using douell_p.GenericMediatR.Handlers.Generics.Commands.Create;
@@ -15,7 +16,8 @@ namespace douell_p.GenericMediatR
     public static class ConfigureContainerExtensions
     {
         public static void ConfigureContainer
-            (this ContainerBuilder builder, Type[] entityTypes, Type[] dbContextTypes)
+        (this ContainerBuilder builder, Type[] entityTypes, Type[] dbContextTypes,
+            Tuple<Type, Type>[] excludesGenericMediatR = null)
         {
             var handlerTypes = new List<Type>
             {
@@ -30,6 +32,9 @@ namespace douell_p.GenericMediatR
             foreach (Type entityType in entityTypes)
             foreach (Type handlerType in handlerTypes)
             {
+                if (excludesGenericMediatR?.Any(x => x.Item1 == handlerType & x.Item2 == entityType) == true)
+                    continue;
+
                 var handlerGenericType = (TypeInfo) handlerType.MakeGenericType(entityType);
                 foreach (Type genericType in handlerGenericType.ImplementedInterfaces)
                     builder.RegisterType(handlerGenericType).As(genericType);

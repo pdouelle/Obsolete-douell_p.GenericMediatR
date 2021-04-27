@@ -15,7 +15,7 @@ namespace douell_p.GenericMediatR.Handlers.Generics.Commands.Delete
             _repository = repository;
         }
 
-        public async Task<Unit> Handle(DeleteCommandModel<T> command, CancellationToken cancellationToken)
+        public virtual async Task<Unit> Handle(DeleteCommandModel<T> command, CancellationToken cancellationToken)
         {
             _repository.Delete(command.Request);
             

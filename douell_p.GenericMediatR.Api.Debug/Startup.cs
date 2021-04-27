@@ -2,6 +2,8 @@ using System;
 using Autofac;
 using douell_p.GenericMediatR.Api.Debug.Data;
 using douell_p.GenericMediatR.Api.Debug.Entities;
+using douell_p.GenericMediatR.Handlers.Generics.Queries.ListQuery;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -25,6 +27,7 @@ namespace douell_p.GenericMediatR.Api.Debug
         {
             services.AddControllers();
 
+            services.AddMediatR(typeof(Startup).Assembly);
             services.AddGenericMediatR();
 
             var connectionString = Configuration.GetConnectionString("Database");
@@ -42,7 +45,8 @@ namespace douell_p.GenericMediatR.Api.Debug
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "douell_p.GenericMediatR.Api.Debug v1"));
+                app.UseSwaggerUI(c =>
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "douell_p.GenericMediatR.Api.Debug v1"));
             }
 
             app.UseHttpsRedirection();
@@ -54,18 +58,22 @@ namespace douell_p.GenericMediatR.Api.Debug
 
         public void ConfigureContainer(ContainerBuilder builder)
         {
-            Type[] entityTypes = 
+            Type[] entityTypes =
             {
                 typeof(WeatherForecast)
             };
 
-            Type[] dbContextTypes = 
+            Type[] dbContextTypes =
             {
                 typeof(DatabaseService)
             };
 
+            Tuple<Type, Type>[] excludesGenericMediatR =
+            {
+                new(typeof(ListQueryHandler<>), typeof(WeatherForecast))
+            };
 
-            builder.ConfigureContainer(entityTypes, dbContextTypes);
+            builder.ConfigureContainer(entityTypes, dbContextTypes, excludesGenericMediatR);
         }
     }
 }

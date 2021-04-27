@@ -15,7 +15,7 @@ namespace douell_p.GenericMediatR.Handlers.Generics.Commands.Update
             _repository = repository;
         }
 
-        public async Task<Unit> Handle(UpdateCommandModel<T> command, CancellationToken cancellationToken)
+        public virtual async Task<Unit> Handle(UpdateCommandModel<T> command, CancellationToken cancellationToken)
         {
             _repository.Edit(command.Request);
 

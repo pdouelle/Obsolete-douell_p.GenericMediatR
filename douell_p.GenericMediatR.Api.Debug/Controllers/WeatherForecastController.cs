@@ -29,7 +29,7 @@ namespace douell_p.GenericMediatR.Api.Debug.Controllers
         public async Task<IActionResult> GetWeatherForecastsAsync()
         {
             IEnumerable<WeatherForecast> response = await _mediator.Send(new ListQueryModel<WeatherForecast>());
-
+            
             return Ok(response);
         }
 
@@ -100,7 +100,7 @@ namespace douell_p.GenericMediatR.Api.Debug.Controllers
             {
                 Request = entity
             });
-            
+
             await _mediator.Send(new SaveCommandModel<WeatherForecast>());
 
             return NoContent();

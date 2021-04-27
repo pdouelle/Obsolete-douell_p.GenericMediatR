@@ -15,7 +15,7 @@ namespace douell_p.GenericMediatR.Handlers.Generics.Queries.IdQuery
             _repository = repository;
         }
 
-        public async Task<T> Handle(IdQueryModel<T> idQuery, CancellationToken cancellationToken) =>
+        public virtual async Task<T> Handle(IdQueryModel<T> idQuery, CancellationToken cancellationToken) =>
             await _repository.GetByIdAsync(idQuery.Request.Id);
     }
 }

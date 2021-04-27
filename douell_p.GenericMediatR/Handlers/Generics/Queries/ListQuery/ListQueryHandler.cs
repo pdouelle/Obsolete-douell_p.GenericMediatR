@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,7 +17,7 @@ namespace douell_p.GenericMediatR.Handlers.Generics.Queries.ListQuery
             _repository = repository;
         }
 
-        public async Task<IEnumerable<T>> Handle(ListQueryModel<T> listQuery, CancellationToken cancellationToken) => 
+        public virtual async Task<IEnumerable<T>> Handle(ListQueryModel<T> listQuery, CancellationToken cancellationToken) =>
             await _repository.GetAllAsync(cancellationToken);
     }
 }

@@ -15,7 +15,7 @@ namespace douell_p.GenericMediatR.Handlers.Generics.Commands.Save
             _repository = repository;
         }
 
-        public async Task<bool> Handle(SaveCommandModel<T> command, CancellationToken cancellationToken) =>
+        public virtual async Task<bool> Handle(SaveCommandModel<T> command, CancellationToken cancellationToken) =>
             await _repository.SaveAsync(cancellationToken);
     }
 }

@@ -1,25 +1,31 @@
 using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 using douell_p.GenericMediatR.Models.Generics.Models.Commands.Create;
 using douell_p.GenericRepository;
 using MediatR;
 
 namespace douell_p.GenericMediatR.Handlers.Generics.Commands.Create
 {
-    public class CreateCommandHandler<T> : IRequestHandler<CreateCommandModel<T>, Unit> where T : IEntity
+    public class CreateCommandHandler<TEntity, TCreate> : IRequestHandler<CreateCommandModel<TEntity, TCreate>, TEntity>
+        where TEntity : IEntity
     {
-        protected readonly IRepository<T> Repository;
+        protected readonly IRepository<TEntity> Repository;
+        private readonly IMapper _mapper;
 
-        public CreateCommandHandler(IRepository<T> repository)
+        public CreateCommandHandler(IRepository<TEntity> repository, IMapper mapper)
         {
             Repository = repository;
+            _mapper = mapper;
         }
 
-        public virtual async Task<Unit> Handle(CreateCommandModel<T> command, CancellationToken cancellationToken)
+        public virtual async Task<TEntity> Handle(CreateCommandModel<TEntity, TCreate> command, CancellationToken cancellationToken)
         {
-            Repository.Create(command.Request);
+            var entity = _mapper.Map<TEntity>(command.Request);
 
-            return Unit.Value;
+            Repository.Create(entity);
+
+            return entity;
         }
     }
 }

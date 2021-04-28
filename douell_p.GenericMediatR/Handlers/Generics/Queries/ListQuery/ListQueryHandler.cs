@@ -7,16 +7,17 @@ using MediatR;
 
 namespace douell_p.GenericMediatR.Handlers.Generics.Queries.ListQuery
 {
-    public class ListQueryHandler<T> : IRequestHandler<ListQueryModel<T>, IEnumerable<T>> where T : IEntity
+    public class ListQueryHandler<TEntity, TQueryList> : IRequestHandler<ListQueryModel<TEntity, TQueryList>, IEnumerable<TEntity>> 
+        where TEntity : IEntity
     {
-        protected readonly IRepository<T> Repository;
+        private readonly IRepository<TEntity> _repository;
 
-        public ListQueryHandler(IRepository<T> repository)
+        public ListQueryHandler(IRepository<TEntity> repository)
         {
-            Repository = repository;
+            _repository = repository;
         }
 
-        public virtual async Task<IEnumerable<T>> Handle(ListQueryModel<T> listQuery, CancellationToken cancellationToken) =>
-            await Repository.GetAllAsync(cancellationToken);
+        public virtual async Task<IEnumerable<TEntity>> Handle(ListQueryModel<TEntity, TQueryList> listQuery, CancellationToken cancellationToken) =>
+            await _repository.GetAllAsync(cancellationToken);
     }
 }

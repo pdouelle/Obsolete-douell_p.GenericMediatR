@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using Autofac;
 using douell_p.GenericMediatR.Handlers.Generics.Commands.Create;
@@ -15,42 +14,50 @@ namespace douell_p.GenericMediatR
 {
     public static class ConfigureContainerExtensions
     {
-        public static void ConfigureContainer
-        (this ContainerBuilder builder, Type[] entityTypes, Type[] dbContextTypes,
-            Tuple<Type, Type>[] excludesGenericMediatR = null)
+        public static void ConfigureContainer(this ContainerBuilder builder, params Type[] dbContextTypes)
         {
+            List<GenericTypesForMediatR> genericTypesForMediatR = IncludedEntities.GetIncludedEntities();
+
+            var handlerGenericsType = new List<TypeInfo>();
+
+            foreach (GenericTypesForMediatR entityType in genericTypesForMediatR)
+            {
+                if (entityType.QueryById != null)
+                    handlerGenericsType.Add((TypeInfo) typeof(IdQueryHandler<,>)
+                        .MakeGenericType(entityType.Entity, entityType.QueryById));
+                if (entityType.QueryList != null)
+                    handlerGenericsType.Add((TypeInfo) typeof(ListQueryHandler<,>)
+                        .MakeGenericType(entityType.Entity, entityType.QueryList));
+                if (entityType.Create != null)
+                    handlerGenericsType.Add((TypeInfo) typeof(CreateCommandHandler<,>)
+                        .MakeGenericType(entityType.Entity, entityType.Create));
+                if (entityType.Update != null)
+                    handlerGenericsType.Add((TypeInfo) typeof(UpdateCommandHandler<,>)
+                        .MakeGenericType(entityType.Entity, entityType.Update));
+                if (entityType.Delete != null)
+                    handlerGenericsType.Add((TypeInfo) typeof(DeleteCommandHandler<,>)
+                        .MakeGenericType(entityType.Entity, entityType.Delete));
+            }
+
             var handlerTypes = new List<Type>
             {
-                typeof(IdQueryHandler<>),
-                typeof(ListQueryHandler<>),
-                typeof(CreateCommandHandler<>),
-                typeof(UpdateCommandHandler<>),
-                typeof(DeleteCommandHandler<>),
                 typeof(SaveCommandHandler<>)
             };
 
-            foreach (Type entityType in entityTypes)
+            foreach (GenericTypesForMediatR entityType in genericTypesForMediatR)
             foreach (Type handlerType in handlerTypes)
-            {
-                if (excludesGenericMediatR?.Any(x => x.Item1 == handlerType & x.Item2 == entityType) == true)
-                    continue;
-
-                var handlerGenericType = (TypeInfo) handlerType.MakeGenericType(entityType);
-                foreach (Type genericType in handlerGenericType.ImplementedInterfaces)
-                    builder.RegisterType(handlerGenericType).As(genericType);
-            }
+                handlerGenericsType.Add((TypeInfo) handlerType.MakeGenericType(entityType.Entity));
 
             Type handlerTypeRepository = typeof(Repository<,>);
 
-            foreach (Type entityType in entityTypes)
+            foreach (var entityType in genericTypesForMediatR)
             foreach (Type dbContextType in dbContextTypes)
-            {
-                var handlerGenericType =
-                    (TypeInfo) handlerTypeRepository.MakeGenericType(entityType, dbContextType);
+                handlerGenericsType.Add(
+                    (TypeInfo) handlerTypeRepository.MakeGenericType(entityType.Entity, dbContextType));
 
-                foreach (Type genericType in handlerGenericType.ImplementedInterfaces)
-                    builder.RegisterType(handlerGenericType).As(genericType);
-            }
+            foreach (TypeInfo handlerGenericType in handlerGenericsType)
+            foreach (Type genericType in handlerGenericType.ImplementedInterfaces)
+                builder.RegisterType(handlerGenericType).As(genericType);
         }
     }
 }

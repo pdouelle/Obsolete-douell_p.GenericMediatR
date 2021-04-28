@@ -2,8 +2,8 @@ using MediatR;
 
 namespace douell_p.GenericMediatR.Models.Generics.Models.Queries.IdQuery
 {
-    public class IdQueryModel<T> : IRequest<T>
+    public class IdQueryModel<TEntity, TQueryById> : IRequest<TEntity>
     {
-        public T Request { get; set; }
+        public TQueryById Request { get; set; }
     }
 }

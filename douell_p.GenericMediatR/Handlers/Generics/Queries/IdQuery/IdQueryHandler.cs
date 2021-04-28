@@ -6,16 +6,19 @@ using MediatR;
 
 namespace douell_p.GenericMediatR.Handlers.Generics.Queries.IdQuery
 {
-    public class IdQueryHandler<T> : IRequestHandler<IdQueryModel<T>, T> where T : IEntity
+    public class IdQueryHandler<TEntity, TQueryById> : IRequestHandler<IdQueryModel<TEntity, TQueryById>, TEntity>
+        where TEntity : IEntity
+        where TQueryById : IEntity
     {
-        protected readonly IRepository<T> Repository;
+        protected readonly IRepository<TEntity> Repository;
 
-        public IdQueryHandler(IRepository<T> repository)
+        public IdQueryHandler(IRepository<TEntity> repository)
         {
             Repository = repository;
         }
 
-        public virtual async Task<T> Handle(IdQueryModel<T> idQuery, CancellationToken cancellationToken) =>
-            await Repository.GetByIdAsync(idQuery.Request.Id);
+        public virtual async Task<TEntity> Handle(IdQueryModel<TEntity, TQueryById> query,
+            CancellationToken cancellationToken) =>
+            await Repository.GetByIdAsync(query.Request.Id);
     }
 }

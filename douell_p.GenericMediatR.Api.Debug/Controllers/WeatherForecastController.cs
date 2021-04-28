@@ -2,6 +2,11 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using douell_p.GenericMediatR.Api.Debug.Entities;
+using douell_p.GenericMediatR.Api.Debug.Models.WeatherForecasts.Models.Commands.CreateWeatherForecast;
+using douell_p.GenericMediatR.Api.Debug.Models.WeatherForecasts.Models.Commands.DeleteWeatherForecast;
+using douell_p.GenericMediatR.Api.Debug.Models.WeatherForecasts.Models.Commands.UpdateWeatherForecast;
+using douell_p.GenericMediatR.Api.Debug.Models.WeatherForecasts.Models.Queries.GetWeatherForecastById;
+using douell_p.GenericMediatR.Api.Debug.Models.WeatherForecasts.Models.Queries.GetWeatherForecastList;
 using douell_p.GenericMediatR.Models.Generics.Models.Commands.Create;
 using douell_p.GenericMediatR.Models.Generics.Models.Commands.Delete;
 using douell_p.GenericMediatR.Models.Generics.Models.Commands.Save;
@@ -26,20 +31,25 @@ namespace douell_p.GenericMediatR.Api.Debug.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetWeatherForecastsAsync()
+        public async Task<IActionResult> GetWeatherForecastsAsync([FromQuery] GetWeatherForecastListQueryModel request)
         {
-            IEnumerable<WeatherForecast> response = await _mediator.Send(new ListQueryModel<WeatherForecast>());
-            
+            IEnumerable<WeatherForecast> response = await _mediator.Send(
+                new ListQueryModel<WeatherForecast, GetWeatherForecastListQueryModel>
+                {
+                    Request = request
+                });
+
             return Ok(response);
         }
 
         [HttpGet("{id}", Name = nameof(GetWeatherForecastsByIdAsync))]
         public async Task<IActionResult> GetWeatherForecastsByIdAsync(Guid id)
         {
-            WeatherForecast response = await _mediator.Send(new IdQueryModel<WeatherForecast>
-            {
-                Request = new WeatherForecast {Id = id}
-            });
+            WeatherForecast response = await _mediator.Send(
+                new IdQueryModel<WeatherForecast, GetWeatherForecastByIdQueryModel>
+                {
+                    Request = new GetWeatherForecastByIdQueryModel {Id = id}
+                });
 
             if (response == null)
                 return NotFound();
@@ -48,36 +58,37 @@ namespace douell_p.GenericMediatR.Api.Debug.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateWeatherForecastsAsync([FromBody] WeatherForecast request)
+        public async Task<IActionResult> CreateWeatherForecastsAsync(
+            [FromBody] CreateWeatherForecastCommandModel request)
         {
-            await _mediator.Send(new CreateCommandModel<WeatherForecast>
-            {
-                Request = request
-            });
+            WeatherForecast entity = await _mediator.Send(
+                new CreateCommandModel<WeatherForecast, CreateWeatherForecastCommandModel>
+                {
+                    Request = request
+                });
 
             await _mediator.Send(new SaveCommandModel<WeatherForecast>());
 
-            return CreatedAtRoute
-                (nameof(GetWeatherForecastsByIdAsync), new {id = request.Id}, request);
+            return CreatedAtRoute(nameof(GetWeatherForecastsByIdAsync), new {id = entity.Id}, entity);
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateWeatherForecastsAsync
-            (Guid id, [FromBody] WeatherForecast request)
+            (Guid id, [FromBody] UpdateWeatherForecastCommandModel request)
         {
-            WeatherForecast entity = await _mediator.Send(new IdQueryModel<WeatherForecast>
-            {
-                Request = new WeatherForecast {Id = id}
-            });
+            WeatherForecast entity = await _mediator.Send(
+                new IdQueryModel<WeatherForecast, GetWeatherForecastByIdQueryModel>
+                {
+                    Request = new GetWeatherForecastByIdQueryModel {Id = id}
+                });
 
             if (entity == null)
                 return NotFound();
 
-            entity.Name = request.Name;
-
-            await _mediator.Send(new UpdateCommandModel<WeatherForecast>
+            await _mediator.Send(new UpdateCommandModel<WeatherForecast, UpdateWeatherForecastCommandModel>
             {
-                Request = entity
+                Entity = entity,
+                Request = request
             });
 
             await _mediator.Send(new SaveCommandModel<WeatherForecast>());
@@ -86,19 +97,21 @@ namespace douell_p.GenericMediatR.Api.Debug.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteNotificationTemplatesAsync(Guid id)
+        public async Task<IActionResult> DeleteNotificationTemplatesAsync(Guid id, [FromQuery]DeleteWeatherForecastCommandModel request)
         {
-            WeatherForecast entity = await _mediator.Send(new IdQueryModel<WeatherForecast>
-            {
-                Request = new WeatherForecast {Id = id}
-            });
+            WeatherForecast entity = await _mediator.Send(
+                new IdQueryModel<WeatherForecast, GetWeatherForecastByIdQueryModel>
+                {
+                    Request = new GetWeatherForecastByIdQueryModel {Id = id}
+                });
 
             if (entity == null)
                 return NotFound();
 
-            await _mediator.Send(new DeleteCommandModel<WeatherForecast>
+            await _mediator.Send(new DeleteCommandModel<WeatherForecast, DeleteWeatherForecastCommandModel>
             {
-                Request = entity
+                Entity = entity,
+                Request = request
             });
 
             await _mediator.Send(new SaveCommandModel<WeatherForecast>());

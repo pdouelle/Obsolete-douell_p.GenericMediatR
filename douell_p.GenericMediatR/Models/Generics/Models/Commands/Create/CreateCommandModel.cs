@@ -2,8 +2,8 @@ using MediatR;
 
 namespace douell_p.GenericMediatR.Models.Generics.Models.Commands.Create
 {
-    public class CreateCommandModel<T> : IRequest<Unit>
+    public class CreateCommandModel<TEntity, TCreate> : IRequest<TEntity>
     {
-        public T Request { get; set; }
+        public TCreate Request { get; set; }
     }
 }

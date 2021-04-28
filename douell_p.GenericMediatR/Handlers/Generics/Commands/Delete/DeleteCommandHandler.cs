@@ -6,20 +6,22 @@ using MediatR;
 
 namespace douell_p.GenericMediatR.Handlers.Generics.Commands.Delete
 {
-    public class DeleteCommandHandler<T> : IRequestHandler<DeleteCommandModel<T>, Unit> where T : IEntity
+    public class DeleteCommandHandler<TEntity, TDelete> : IRequestHandler<DeleteCommandModel<TEntity, TDelete>, TEntity>
+        where TEntity : IEntity
     {
-        protected readonly IRepository<T> Repository;
+        protected readonly IRepository<TEntity> Repository;
 
-        public DeleteCommandHandler(IRepository<T> repository)
+        public DeleteCommandHandler(IRepository<TEntity> repository)
         {
             Repository = repository;
         }
 
-        public virtual async Task<Unit> Handle(DeleteCommandModel<T> command, CancellationToken cancellationToken)
+        public virtual async Task<TEntity> Handle
+            (DeleteCommandModel<TEntity, TDelete> command, CancellationToken cancellationToken)
         {
-            Repository.Delete(command.Request);
-            
-            return Unit.Value;
+            Repository.Delete(command.Entity);
+
+            return command.Entity;
         }
     }
 }

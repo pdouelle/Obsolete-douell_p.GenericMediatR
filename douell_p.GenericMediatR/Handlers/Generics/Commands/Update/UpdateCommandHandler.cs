@@ -1,25 +1,31 @@
 using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 using douell_p.GenericMediatR.Models.Generics.Models.Commands.Update;
 using douell_p.GenericRepository;
 using MediatR;
 
 namespace douell_p.GenericMediatR.Handlers.Generics.Commands.Update
 {
-    public class UpdateCommandHandler<T> : IRequestHandler<UpdateCommandModel<T>, Unit> where T : IEntity
+    public class UpdateCommandHandler<TEntity, TUpdate> : IRequestHandler<UpdateCommandModel<TEntity, TUpdate>, TEntity> 
+        where TEntity : IEntity
     {
-        protected readonly IRepository<T> Repository;
+        protected readonly IRepository<TEntity> Repository;
+        private readonly IMapper _mapper;
 
-        public UpdateCommandHandler(IRepository<T> repository)
+        public UpdateCommandHandler(IRepository<TEntity> repository, IMapper mapper)
         {
             Repository = repository;
+            _mapper = mapper;
         }
 
-        public virtual async Task<Unit> Handle(UpdateCommandModel<T> command, CancellationToken cancellationToken)
+        public virtual async Task<TEntity> Handle(UpdateCommandModel<TEntity, TUpdate> command, CancellationToken cancellationToken)
         {
-            Repository.Edit(command.Request);
+            _mapper.Map(command.Request, command.Entity);
 
-            return Unit.Value;
+            Repository.Edit(command.Entity);
+
+            return command.Entity;
         }
     }
 }

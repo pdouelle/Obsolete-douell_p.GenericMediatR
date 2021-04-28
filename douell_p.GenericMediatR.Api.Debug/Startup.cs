@@ -2,6 +2,7 @@ using System;
 using Autofac;
 using douell_p.GenericMediatR.Api.Debug.Data;
 using douell_p.GenericMediatR.Api.Debug.Entities;
+using douell_p.GenericMediatR.Api.Debug.Models.WeatherForecasts.Models.Queries.GetWeatherForecastList;
 using douell_p.GenericMediatR.Handlers.Generics.Queries.ListQuery;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -28,7 +29,8 @@ namespace douell_p.GenericMediatR.Api.Debug
             services.AddControllers();
 
             services.AddMediatR(typeof(Startup).Assembly);
-            services.AddGenericMediatR();
+            services.AddGenericMediatR(typeof(Startup).Assembly);
+            services.AddAutoMapper(typeof(Startup).Assembly);
 
             var connectionString = Configuration.GetConnectionString("Database");
             services.AddDbContext<DatabaseService>(options => { options.UseSqlServer(connectionString); });
@@ -58,22 +60,7 @@ namespace douell_p.GenericMediatR.Api.Debug
 
         public void ConfigureContainer(ContainerBuilder builder)
         {
-            Type[] entityTypes =
-            {
-                typeof(WeatherForecast)
-            };
-
-            Type[] dbContextTypes =
-            {
-                typeof(DatabaseService)
-            };
-
-            Tuple<Type, Type>[] excludesGenericMediatR =
-            {
-                new(typeof(ListQueryHandler<>), typeof(WeatherForecast))
-            };
-
-            builder.ConfigureContainer(entityTypes, dbContextTypes, excludesGenericMediatR);
+            builder.ConfigureContainer(typeof(DatabaseService));
         }
     }
 }

@@ -2,8 +2,9 @@ using MediatR;
 
 namespace douell_p.GenericMediatR.Models.Generics.Models.Commands.Delete
 {
-    public class DeleteCommandModel<T> : IRequest<Unit>
+    public class DeleteCommandModel<TEntity, TDelete> : IRequest<TEntity>
     {
-        public T Request { get; set; }
+        public TEntity Entity { get; set; }
+        public TDelete Request { get; set; }
     }
 }

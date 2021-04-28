@@ -3,7 +3,7 @@
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
         <PackageId>douell_p.GenericMediatR</PackageId>
-        <Version>1.0.3</Version>
+        <Version>1.0.5</Version>
         <Authors>Philippe DOUELLE</Authors>
         <Company>BETTERIT</Company>
         <RootNamespace>douell_p.GenericMediatR</RootNamespace>
@@ -15,7 +15,7 @@
       <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.1.0" />
       <PackageReference Include="AutoMapper" Version="10.1.1" />
       <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
-      <PackageReference Include="douell_p.GenericRepository" Version="1.0.0" />
+      <PackageReference Include="douell_p.GenericRepository" Version="1.0.1" />
       <PackageReference Include="MediatR" Version="9.0.0" />
       <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
     </ItemGroup>

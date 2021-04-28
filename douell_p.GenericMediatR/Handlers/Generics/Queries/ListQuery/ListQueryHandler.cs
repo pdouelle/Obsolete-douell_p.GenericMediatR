@@ -10,14 +10,14 @@ namespace douell_p.GenericMediatR.Handlers.Generics.Queries.ListQuery
     public class ListQueryHandler<TEntity, TQueryList> : IRequestHandler<ListQueryModel<TEntity, TQueryList>, IEnumerable<TEntity>> 
         where TEntity : IEntity
     {
-        private readonly IRepository<TEntity> _repository;
+        protected readonly IRepository<TEntity> Repository;
 
         public ListQueryHandler(IRepository<TEntity> repository)
         {
-            _repository = repository;
+            Repository = repository;
         }
 
         public virtual async Task<IEnumerable<TEntity>> Handle(ListQueryModel<TEntity, TQueryList> listQuery, CancellationToken cancellationToken) =>
-            await _repository.GetAllAsync(cancellationToken);
+            await Repository.GetAllAsync(cancellationToken);
     }
 }

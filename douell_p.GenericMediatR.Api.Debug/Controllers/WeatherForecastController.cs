@@ -4,16 +4,19 @@ using System.Threading.Tasks;
 using douell_p.GenericMediatR.Api.Debug.Entities;
 using douell_p.GenericMediatR.Api.Debug.Models.WeatherForecasts.Models.Commands.CreateWeatherForecast;
 using douell_p.GenericMediatR.Api.Debug.Models.WeatherForecasts.Models.Commands.DeleteWeatherForecast;
+using douell_p.GenericMediatR.Api.Debug.Models.WeatherForecasts.Models.Commands.PatchWeatherForecast;
 using douell_p.GenericMediatR.Api.Debug.Models.WeatherForecasts.Models.Commands.UpdateWeatherForecast;
 using douell_p.GenericMediatR.Api.Debug.Models.WeatherForecasts.Models.Queries.GetWeatherForecastById;
 using douell_p.GenericMediatR.Api.Debug.Models.WeatherForecasts.Models.Queries.GetWeatherForecastList;
 using douell_p.GenericMediatR.Models.Generics.Models.Commands.Create;
 using douell_p.GenericMediatR.Models.Generics.Models.Commands.Delete;
+using douell_p.GenericMediatR.Models.Generics.Models.Commands.Patch;
 using douell_p.GenericMediatR.Models.Generics.Models.Commands.Save;
 using douell_p.GenericMediatR.Models.Generics.Models.Commands.Update;
 using douell_p.GenericMediatR.Models.Generics.Models.Queries.IdQuery;
 using douell_p.GenericMediatR.Models.Generics.Models.Queries.ListQuery;
 using MediatR;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
 namespace douell_p.GenericMediatR.Api.Debug.Controllers
@@ -86,6 +89,33 @@ namespace douell_p.GenericMediatR.Api.Debug.Controllers
                 return NotFound();
 
             await _mediator.Send(new UpdateCommandModel<WeatherForecast, UpdateWeatherForecastCommandModel>
+            {
+                Entity = entity,
+                Request = request
+            });
+
+            await _mediator.Send(new SaveCommandModel<WeatherForecast>());
+
+            return Ok(entity);
+        }
+        
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> PatchWeatherForecastsAsync
+            (Guid id, [FromBody] JsonPatchDocument<PatchWeatherForecastCommandModel> patchDocument)
+        {
+            WeatherForecast entity = await _mediator.Send(
+                new IdQueryModel<WeatherForecast, GetWeatherForecastByIdQueryModel>
+                {
+                    Request = new GetWeatherForecastByIdQueryModel {Id = id}
+                });
+
+            if (entity == null)
+                return NotFound();
+            
+            var request = new PatchWeatherForecastCommandModel();
+            patchDocument.ApplyTo(request);
+
+            await _mediator.Send(new PatchCommandModel<WeatherForecast, PatchWeatherForecastCommandModel>
             {
                 Entity = entity,
                 Request = request

@@ -32,6 +32,7 @@ namespace douell_p.GenericMediatR
                             QueryById = customAttribute.QueryById,
                             Create = customAttribute.Create,
                             Update = customAttribute.Update,
+                            Patch = customAttribute.Patch,
                             Delete = customAttribute.Delete
                         });
                     }

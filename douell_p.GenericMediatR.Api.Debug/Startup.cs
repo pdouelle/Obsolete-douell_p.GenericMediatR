@@ -26,7 +26,7 @@ namespace douell_p.GenericMediatR.Api.Debug
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson();;
 
             services.AddMediatR(typeof(Startup).Assembly);
             services.AddGenericMediatR(typeof(Startup).Assembly);

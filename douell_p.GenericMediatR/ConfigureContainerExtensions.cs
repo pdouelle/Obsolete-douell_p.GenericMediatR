@@ -4,6 +4,7 @@ using System.Reflection;
 using Autofac;
 using douell_p.GenericMediatR.Handlers.Generics.Commands.Create;
 using douell_p.GenericMediatR.Handlers.Generics.Commands.Delete;
+using douell_p.GenericMediatR.Handlers.Generics.Commands.Patch;
 using douell_p.GenericMediatR.Handlers.Generics.Commands.Save;
 using douell_p.GenericMediatR.Handlers.Generics.Commands.Update;
 using douell_p.GenericMediatR.Handlers.Generics.Queries.IdQuery;
@@ -34,6 +35,9 @@ namespace douell_p.GenericMediatR
                 if (entityType.Update != null)
                     handlerGenericsType.Add((TypeInfo) typeof(UpdateCommandHandler<,>)
                         .MakeGenericType(entityType.Entity, entityType.Update));
+                if (entityType.Patch != null)
+                    handlerGenericsType.Add((TypeInfo) typeof(PatchCommandHandler<,>)
+                        .MakeGenericType(entityType.Entity, entityType.Patch));
                 if (entityType.Delete != null)
                     handlerGenericsType.Add((TypeInfo) typeof(DeleteCommandHandler<,>)
                         .MakeGenericType(entityType.Entity, entityType.Delete));

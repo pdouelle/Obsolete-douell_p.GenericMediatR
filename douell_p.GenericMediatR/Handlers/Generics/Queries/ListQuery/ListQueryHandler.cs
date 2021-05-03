@@ -2,8 +2,9 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using douell_p.GenericMediatR.Models.Generics.Models.Queries.ListQuery;
-using douell_p.GenericRepository;
 using MediatR;
+using pdouelle.Entity;
+using pdouelle.GenericRepository;
 
 namespace douell_p.GenericMediatR.Handlers.Generics.Queries.ListQuery
 {

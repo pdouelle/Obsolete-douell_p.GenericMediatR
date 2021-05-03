@@ -1,5 +1,5 @@
 using System;
-using douell_p.GenericRepository;
+using pdouelle.Entity;
 
 namespace douell_p.GenericMediatR.Api.Debug.Models.WeatherForecasts.Models.Queries.GetWeatherForecastById
 {

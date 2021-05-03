@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using douell_p.GenericRepository;
 using MediatR;
+using pdouelle.Entity;
 
 namespace douell_p.GenericMediatR.Models.Generics.Models.Queries.ListQuery
 {

@@ -9,15 +9,15 @@ using douell_p.GenericMediatR.Handlers.Generics.Commands.Save;
 using douell_p.GenericMediatR.Handlers.Generics.Commands.Update;
 using douell_p.GenericMediatR.Handlers.Generics.Queries.IdQuery;
 using douell_p.GenericMediatR.Handlers.Generics.Queries.ListQuery;
-using douell_p.GenericRepository;
+using pdouelle.GenericRepository;
 
 namespace douell_p.GenericMediatR
 {
-    public static class ConfigureContainerExtensions
+    public static class ConfigureGenericMediatRContainerExtensions
     {
         public static void ConfigureContainer(this ContainerBuilder builder, params Type[] dbContextTypes)
         {
-            List<GenericTypesForMediatR> genericTypesForMediatR = IncludedEntities.GetIncludedEntities();
+            List<GenericTypesForMediatR> genericTypesForMediatR = IncludedGenericMediatREntities.GetIncludedEntities();
 
             var handlerGenericsType = new List<TypeInfo>();
 

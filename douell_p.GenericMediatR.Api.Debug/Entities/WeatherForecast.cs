@@ -4,12 +4,12 @@ using douell_p.GenericMediatR.Api.Debug.Models.WeatherForecasts.Models.Commands.
 using douell_p.GenericMediatR.Api.Debug.Models.WeatherForecasts.Models.Commands.PatchWeatherForecast;
 using douell_p.GenericMediatR.Api.Debug.Models.WeatherForecasts.Models.Commands.UpdateWeatherForecast;
 using douell_p.GenericMediatR.Api.Debug.Models.WeatherForecasts.Models.Queries.GetWeatherForecastById;
-using douell_p.GenericRepository;
+using pdouelle.Entity;
 
 namespace douell_p.GenericMediatR.Api.Debug.Entities
 {
     [
-        MediatREntity
+        GenericMediatREntity
         (
             QueryById = typeof(GetWeatherForecastByIdQueryModel),
             Create = typeof(CreateWeatherForecastCommandModel),

@@ -3,7 +3,7 @@ using System;
 namespace douell_p.GenericMediatR
 {
     [AttributeUsage(AttributeTargets.Class)]
-    public class MediatREntityAttribute : Attribute
+    public class GenericMediatREntityAttribute : Attribute
     {
         public Type QueryList { get; set; }
         public Type QueryById { get; set; }

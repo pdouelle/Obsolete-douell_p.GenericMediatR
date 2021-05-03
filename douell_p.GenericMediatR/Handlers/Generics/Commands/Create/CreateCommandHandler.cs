@@ -2,8 +2,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using douell_p.GenericMediatR.Models.Generics.Models.Commands.Create;
-using douell_p.GenericRepository;
 using MediatR;
+using pdouelle.Entity;
+using pdouelle.GenericRepository;
 
 namespace douell_p.GenericMediatR.Handlers.Generics.Commands.Create
 {

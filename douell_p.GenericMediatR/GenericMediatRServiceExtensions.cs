@@ -4,15 +4,15 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace douell_p.GenericMediatR
 {
-    public static class ServiceCollectionExtensions
+    public static class GenericMediatRServiceExtensions
     {
         public static IServiceCollection AddGenericMediatR
             (this IServiceCollection services, params Assembly[] assemblies)
         {
-            services.AddMediatR(typeof(ServiceCollectionExtensions).Assembly);
-            services.AddAutoMapper(typeof(ServiceCollectionExtensions).Assembly);
+            services.AddMediatR(typeof(GenericMediatRServiceExtensions).Assembly);
+            services.AddAutoMapper(typeof(GenericMediatRServiceExtensions).Assembly);
             
-            IncludedEntities.Assemblies = assemblies;
+            IncludedGenericMediatREntities.Assemblies = assemblies;
 
             return services;
         }

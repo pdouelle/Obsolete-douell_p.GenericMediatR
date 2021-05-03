@@ -6,7 +6,7 @@ using douell_p.GenericMediatR.Api.Debug.Entities;
 using douell_p.GenericMediatR.Api.Debug.Models.WeatherForecasts.Models.Queries.GetWeatherForecastList;
 using douell_p.GenericMediatR.Handlers.Generics.Queries.ListQuery;
 using douell_p.GenericMediatR.Models.Generics.Models.Queries.ListQuery;
-using douell_p.GenericRepository;
+using pdouelle.GenericRepository;
 
 namespace douell_p.GenericMediatR.Api.Debug.Handlers.Queries.GetWeatherList
 {

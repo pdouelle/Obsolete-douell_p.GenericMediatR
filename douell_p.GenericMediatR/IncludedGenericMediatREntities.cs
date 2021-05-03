@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace douell_p.GenericMediatR
 {
-    public static class IncludedEntities
+    public static class IncludedGenericMediatREntities
     {
         public static Assembly[] Assemblies { get; set; }
 
@@ -19,8 +19,8 @@ namespace douell_p.GenericMediatR
 
                 foreach (Type type in types)
                 {
-                    var customAttribute = (MediatREntityAttribute) type
-                        .GetCustomAttributes(typeof(MediatREntityAttribute))
+                    var customAttribute = (GenericMediatREntityAttribute) type
+                        .GetCustomAttributes(typeof(GenericMediatREntityAttribute))
                         .FirstOrDefault();
 
                     if (customAttribute != null)
